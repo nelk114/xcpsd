@@ -1,0 +1,91 @@
+.Dd April 7, 2025
+.Dt XCPSD 1
+.Os \(Tp\[u01BF]\[u021D]\(ss
+.Sh NAME
+.Nm xcpsd
+.Nd XCompose D\(aemon
+.Sh SYNOPSIS
+.Nm
+.Op Fl 1
+.Sh DESCRIPTION
+The
+.Nm
+d\(aemon
+observes keyboard input
+listening for Compose sequences
+beginning with the Compose Key,
+and interprets the ensuing sequence,
+delivering the composed character,
+if any,
+to the focussed window.
+.Pp
+One option is understood:
+.Bl -tag -width Ds
+.It Fl 1
+write a newline to
+.Dv stdout ,
+before closing it,
+once internal setup is complete.
+With
+.Dv stdout
+suitably redirected,
+this can be used by monitoring programs
+to check when the d\(aemon is ready.
+.El
+.Sh ENVIRONMENT
+.Bl -tag -width Ds
+.It Ev DISPLAY
+X Server to contact.
+.It Ev XCOMPOSEFILE
+File to use for Compose sequences.
+.El
+.Sh FILES
+.Bl -tag -width Ds
+.It Dv $HOME/.XCompose
+User default compose file if
+.Ev XCOMPOSEFILE
+is not set.
+.El
+.Sh EXIT STATUS
+.Bl -tag -width Ds
+.It 100
+Bad usage.
+.It 111
+Setup failed.
+.El
+.Sh SEE ALSO
+.Xr Compose 5 ,
+.Xr s6-notifywhenup 7
+.Sh BUGS
+Compose sequences are assumed
+to start with the Compose Key;
+starting sequences with other keys
+is not currently supported.
+.Pp
+Non\(hytextual keystrokes
+will be absorbed
+while waiting for completion of a Compose sequence.
+This interferes with
+e.g.
+desktop keybindings.
+It is recommended to reserve at least one key
+.Po
+for example
+.Dv Escape
+.Pc
+that is not included in any sequence;
+this may then be used
+to cancel the sequence safely.
+.Pp
+Key events following an invalid Compose sequence
+are treated identically
+to successfully completed sequences,
+with the consequence
+that such keystrokes are distinguishable
+from ordinary keystrokes.
+.Pp
+Some applications react adversely
+to losing focus as a result of a keyboard grab.
+An attempt is made to work around this,
+but it may be necessary to reselect input fields
+before inputting the Compose sequence.
