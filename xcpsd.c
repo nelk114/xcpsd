@@ -29,10 +29,10 @@ KeyCode m=XKeysymToKeycode(d,XK_Multi_key),t;if(!m)W("!!Multi_key"),exit(111);{
 	}
 for(int i;i<256;i++){KeySym k;int _;XkbLookupKeySym(d,m,i,&_,&k);if(k==XK_Multi_key)XGrabKey(d,m,i,w,1,GrabModeAsync,GrabModeAsync);}
 XEvent e;XKeyEvent*E=(XKeyEvent*)&e;KeySym k;int S;char _[4];
-if(C>1){write(1,"\n",1);close(1);}itr(NE,){if(e.type!=KeyPress)continue;
+if(C>1){write(1,"\n",1);close(1);}itr(NE,)if(e.type==KeyPress){
 	XmbLookupString(c,E,_,4,&k,&S);XFilterEvent(&e,0);if(k==XK_Multi_key){
 		{Window f;int F;XGetInputFocus(d,&f,&F);XGrabKeyboard(d,w,1,GrabModeAsync,GrabModeAsync,0);XSetInputFocus(d,f,F,0);}
-		itr(NE,){if(e.type!=KeyPress)continue;
+		itr(NE,)if(e.type==KeyPress){
 			if(XmbLookupString(c,E,_,4,&k,&S)&&!XFilterEvent(&e,0)){
 				XUngrabKeyboard(d,0);
 				XChangeKeyboardMapping(d,t,1,&k,1);XSync(d,0);
