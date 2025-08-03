@@ -68,14 +68,14 @@ while waiting for completion of a Compose sequence.
 This interferes with
 e.g.
 desktop keybindings.
-It is recommended to reserve at least one key
+Dealing with this correctly is a bit tricky;
+as yet, the simplest approach is
+Just Don't Do That
 .Po
-for example
-.Dv Escape
+in particular, once in Compose mode,
+stick to keystrokes that actually form part of sequences.
+This should only rarely\(tm be a problem in practice
 .Pc
-that is not included in any sequence;
-this may then be used
-to cancel the sequence safely.
 .Pp
 Key events following an invalid Compose sequence
 are treated identically
