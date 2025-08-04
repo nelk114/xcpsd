@@ -8,6 +8,7 @@
 #define fE(w,i) for(;XNextEvent(d,&e),w;)if(i)
 #define E(s,e) write(2,s "\n",sizeof(s)),e<0?0:exit(e)
 int L(XIC c,XEvent*e,KeySym*k,int*S){char _[4];return!!XmbLookupString(c,(XKeyEvent*)e,_,4,k,S)&!XFilterEvent(e,0);}
+int H(Display*d,XErrorEvent*e){if(e->error_code==BadAccess)E("!!Grab",111);else XSetErrorHandler(0);}
 int main(int C,char**V){
 setlocale(LC_ALL,"");
 Display*d=XOpenDisplay(getenv("DISPLAY"));if(!d)E("!!$DISPLAY",111);
@@ -27,7 +28,9 @@ KeyCode m=XKeysymToKeycode(d,XK_Multi_key),t;if(!m)E("!!Multi_key",111);{
 	int M,m,n;XDisplayKeycodes(d,&m,&M);KeySym*K=XGetKeyboardMapping(d,m,M-m+1,&n);
 	int i=m;for(;i<M;i++)if(!K[(i-m)*n]){t=i;break;}XFree(K);if(i==M)E("!!KS",111);
 	}
+XSetErrorHandler(H);
 for(int i;i<256;i++){KeySym k;int _;XkbLookupKeySym(d,m,i,&_,&k);if(k==XK_Multi_key)XGrabKey(d,m,i,w,1,GrabModeAsync,GrabModeAsync);}
+XSync(d,0);
 XEvent e;KeySym k;int S;if(C>1)write(1,"\n",1),close(1);fE(1,e.type==KeyPress&&(L(c,&e,&k,&S),k==XK_Multi_key)){
 	{Window f;int F;XGetInputFocus(d,&f,&F);XGrabKeyboard(d,w,1,GrabModeAsync,GrabModeAsync,0);XSetInputFocus(d,f,F,0);}
 	fE(1,e.type==KeyPress&&L(c,&e,&k,&S)){
