@@ -32,14 +32,18 @@ XSetErrorHandler(H);
 for(int i;i<256;i++){KeySym k;int _;XkbLookupKeySym(d,m,i,&_,&k);if(k==XK_Multi_key)XGrabKey(d,m,i,w,1,GrabModeAsync,GrabModeAsync);}
 XSync(d,0);
 XEvent e;KeySym k;int S;if(C>1)write(1,"\n",1),close(1);fE(1,e.type==KeyPress&&(L(c,&e,&k,&S),k==XK_Multi_key)){
-	{Window f;int F;XGetInputFocus(d,&f,&F);XGrabKeyboard(d,w,1,GrabModeAsync,GrabModeAsync,0);XSetInputFocus(d,f,F,0);}
+	{
+		Window f;int F;XGetInputFocus(d,&f,&F);
+		if(XGrabKeyboard(d,w,1,GrabModeAsync,GrabModeAsync,0)){E("!GrabKeyboard",-1);continue;}else XSetInputFocus(d,f,F,0);
+		}
 	fE(1,e.type==KeyPress&&L(c,&e,&k,&S)){
 		XUngrabKeyboard(d,0);
 		XChangeKeyboardMapping(d,t,1,&k,1);XSync(d,0);
 		XTestFakeKeyEvent(d,t,1,0);XTestFakeKeyEvent(d,t,0,0);
-		XGrabKeyboard(d,w,1,GrabModeAsync,GrabModeAsync,0);
-		XSelectInput(d,w,KeyReleaseMask);XFlush(d);fE(e.type!=KeyRelease,0);XSelectInput(d,w,KeyPressMask);XFlush(d);
-		XUngrabKeyboard(d,0);
+		if(XGrabKeyboard(d,w,1,GrabModeAsync,GrabModeAsync,0))E("!再GrabKeyboard",-1);else{
+			XSelectInput(d,w,KeyReleaseMask);XFlush(d);fE(e.type!=KeyRelease,0);XSelectInput(d,w,KeyPressMask);XFlush(d);
+			XUngrabKeyboard(d,0);
+			}
 		k=0;XChangeKeyboardMapping(d,t,1,&k,1);XSync(d,0);
 		break;
 }	}	}
