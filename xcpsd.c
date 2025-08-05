@@ -34,7 +34,8 @@ XSync(d,0);
 XEvent e;KeySym k;int S;if(C>1)write(1,"\n",1),close(1);fE(1,e.type==KeyPress&&(L(c,&e,&k,&S),k==XK_Multi_key)){
 	{
 		Window f;int F;XGetInputFocus(d,&f,&F);
-		if(XGrabKeyboard(d,w,1,GrabModeAsync,GrabModeAsync,0)){E("!GrabKeyboard",-1);continue;}else XSetInputFocus(d,f,F,0);
+		if(XGrabKeyboard(d,w,1,GrabModeAsync,GrabModeAsync,0)){E("!GrabKeyboard",-1);continue;}
+		XSetInputFocus(d,f,F,0);
 		}
 	fE(1,e.type==KeyPress&&L(c,&e,&k,&S)){
 		XUngrabKeyboard(d,0);
