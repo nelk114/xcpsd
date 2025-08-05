@@ -16,7 +16,7 @@ Display*d=XOpenDisplay(getenv("DISPLAY"));if(!d)E("!!$DISPLAY",111);
 Window w=RootWindow(d,DefaultScreen(d));if(!w)E("!!RootWindow",111);
 XSelectInput(d,w,KeyPressMask);XFlush(d);
 XIC c=0;{
-	if(!XSetLocaleModifiers("@im=none"))E("!SetLocaleModifiers",-1);/*Unclear this is necessary*/
+	if(!XSetLocaleModifiers("@im=none"))E("!SetLocaleModifiers",-1);
 	XIM m=XOpenIM(d,0,0,0);XIMStyles*S;XIMStyle s;if(!m)E("!!XIM",111);
 	if(XGetIMValues(m,XNQueryInputStyle,&S,0)||!S)E("!XIMStyle",-1);if(S){
 		s=0;int i=0;for(;i<S->count_styles;i++)if((s=S->supported_styles[i])==(XIMPreeditNothing|XIMStatusNothing))break;
