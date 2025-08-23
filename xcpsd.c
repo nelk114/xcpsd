@@ -11,7 +11,7 @@ int L(XIC c,XEvent*e,KeySym*k,int*S){char _[4];return!!XmbLookupString(c,(XKeyEv
 int H(Display*d,XErrorEvent*e){if(e->error_code==BadAccess)E("!!Grab",111);else XSetErrorHandler(0);}
 int main(int C,char**V){
 setlocale(LC_ALL,"");
-Display*d=XOpenDisplay(getenv("DISPLAY"));if(!d)E("!!$DISPLAY",111);
+Display*d=XOpenDisplay(0);if(!d)E("!!$DISPLAY",111);
 {int _;if(!XTestQueryExtension(d,&_,&_,&_,&_))E("!!XTest",111);}
 Window w=RootWindow(d,DefaultScreen(d));if(!w)E("!!RootWindow",111);
 XSelectInput(d,w,KeyPressMask);XFlush(d);
@@ -22,7 +22,7 @@ XIC c=0;{
 		s=0;int i=0;for(;i<S->count_styles;i++)if((s=S->supported_styles[i])==(XIMPreeditNothing|XIMStatusNothing))break;
 		if(i==S->count_styles)E("!XIMStyle",-1);XFree(S);
 		}
-	if(m&&s&&!(c=XCreateIC(m,XNInputStyle,s,XNClientWindow,w,XNFocusWindow,w,0)))E("!!XIC",111);
+	if(m&&s&&!(c=XCreateIC(m,XNInputStyle,s,XNClientWindow,w,0)))E("!!XIC",111);
 	}
 KeyCode m=XKeysymToKeycode(d,XK_Multi_key),t;if(!m)E("!!Multi_key",111);{
 	int M,m,n;XDisplayKeycodes(d,&m,&M);KeySym*K=XGetKeyboardMapping(d,m,M-m+1,&n);
