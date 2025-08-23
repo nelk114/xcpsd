@@ -14,7 +14,6 @@ setlocale(LC_ALL,"");
 Display*d=XOpenDisplay(0);if(!d)E("!!$DISPLAY",111);
 {int _;if(!XTestQueryExtension(d,&_,&_,&_,&_))E("!!XTest",111);}
 Window w=RootWindow(d,DefaultScreen(d));if(!w)E("!!RootWindow",111);
-XSelectInput(d,w,KeyPressMask);XFlush(d);
 XIC c=0;{
 	if(!XSetLocaleModifiers("@im=none"))E("!SetLocaleModifiers",-1);
 	XIM m=XOpenIM(d,0,0,0);XIMStyles*S;XIMStyle s;if(!m)E("!!XIM",111);
@@ -28,7 +27,7 @@ KeyCode m=XKeysymToKeycode(d,XK_Multi_key),t;if(!m)E("!!Multi_key",111);{
 	int M,m,n;XDisplayKeycodes(d,&m,&M);KeySym*K=XGetKeyboardMapping(d,m,M-m+1,&n);
 	int i=m;for(;i<M;i++)if(!K[(i-m)*n]){t=i;break;}XFree(K);if(i==M)E("!!KS",111);
 	}
-XSetErrorHandler(H);
+XSetErrorHandler(H);XSelectInput(d,w,KeyPressMask);
 for(int i;i<256;i++){KeySym k;int _;XkbLookupKeySym(d,m,i,&_,&k);if(k==XK_Multi_key)XGrabKey(d,m,i,w,1,GrabModeAsync,GrabModeAsync);}
 XSync(d,0);
 XEvent e;KeySym k;int S;if(C>1)write(1,"\n",1),close(1);fE(1,e.type==KeyPress&&(L(c,&e,&k,&S),k==XK_Multi_key)){
