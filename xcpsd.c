@@ -13,7 +13,7 @@ int main(int C,char**V){
 setlocale(LC_ALL,"");
 Display*d=XOpenDisplay(0);d||E("!!$DISPLAY",111);
 {int _;XTestQueryExtension(d,&_,&_,&_,&_)||E("!!XTest",111);}
-Window w=RootWindow(d,DefaultScreen(d));w||E("!!RootWindow",111);
+Window w=DefaultRootWindow(d);w||E("!!RootWindow",111);
 XIC c=0;{
 	XSetLocaleModifiers("@im=none")||E("!SetLocaleModifiers",-1);
 	XIM m=XOpenIM(d,0,0,0);XIMStyles*S;XIMStyle s;m||E("!!XIM",111);
