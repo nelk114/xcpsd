@@ -28,7 +28,7 @@ KeyCode m=XKeysymToKeycode(d,XK_Multi_key),t;m||E("!!Multi_key",111);{
 	int i=m;for(;i<M;i++)if(!K[(i-m)*n]){t=i;break;}XFree(K);i==M&&E("!!KS",111);
 	}
 XSetErrorHandler(H);XSelectInput(d,w,KeyPressMask);
-for(int i;i<256;i++){KeySym k;int _;XkbLookupKeySym(d,m,i,&_,&k);k==XK_Multi_key&&XGrabKey(d,m,i,w,1,GrabModeAsync,GrabModeAsync);}
+for(int i=0;i<256;i++){KeySym k;int _;XkbLookupKeySym(d,m,i,&_,&k);k==XK_Multi_key&&XGrabKey(d,m,i,w,1,GrabModeAsync,GrabModeAsync);}
 XSync(d,0);
 XEvent e;KeySym k;int S;if(C>1)write(1,"\n",1),close(1);fE(1,e.type==KeyPress&&(L(c,&e,&k,&S),k==XK_Multi_key)){
 #define v ((XKeyEvent*)&e)->time
