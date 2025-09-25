@@ -19,17 +19,17 @@ XIC c=0;{
 	XSetLocaleModifiers("@im=none")||E("!SetLocaleModifiers",-1);
 	XIM m=XOpenIM(d,0,0,0);XIMStyles*S;XIMStyle s;m||E("!!XIM",111);
 	!XGetIMValues(m,XNQueryInputStyle,&S,0)&&S||E("!XIMStyle",-1);if(S){
-		s=0;int i=0;for(;i<S->count_styles;i++)if((s=S->supported_styles[i])==(XIMPreeditNothing|XIMStatusNothing))goto f;
+		s=0;fI(S->count_styles)if((s=S->supported_styles[i])==(XIMPreeditNothing|XIMStatusNothing))goto f;
 		E("!XIMStyle",-1);f:XFree(S);
 		}
 	s&&!(c=XCreateIC(m,XNInputStyle,s,XNClientWindow,w,0))&&E("!!XIC",111);
 	}
 KeyCode m=XKeysymToKeycode(d,XK_Multi_key),t;m||E("!!Multi_key",111);{
 	int M,m,n;XDisplayKeycodes(d,&m,&M);KeySym*K=XGetKeyboardMapping(d,m,M-m+1,&n);
-	int i=m;for(;i<M;i++)if(!K[(i-m)*n]){t=i;goto k;}E("!!KS",111);k:XFree(K);
+	fI(M-m)if(!K[(i)*n]){t=i+m;goto k;}E("!!KS",111);k:XFree(K);
 	}
 XSetErrorHandler(H);XSelectInput(d,w,KeyPressMask);
-for(int i=0;i<256;i++){KeySym k;int _;XkbLookupKeySym(d,m,i,&_,&k);k==XK_Multi_key&&XGrabKey(d,m,i,w,1,GrabModeAsync,GrabModeAsync);}
+fI(256){KeySym k;int _;XkbLookupKeySym(d,m,i,&_,&k);k==XK_Multi_key&&XGrabKey(d,m,i,w,1,GrabModeAsync,GrabModeAsync);}
 XSync(d,0);
 XEvent e;KeySym k;int S;if(C>1)write(1,"\n",1),close(1);fE(1,e.type==KeyPress&&(L(c,&e,&k,&S),k==XK_Multi_key)){
 #define v ((XKeyEvent*)&e)->time
