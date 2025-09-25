@@ -6,7 +6,7 @@
 #include <X11/keysymdef.h>
 #include <X11/extensions/XTest.h>
 #define fI(n) for(int i=0;i<n;i++)
-#define fE(w,i) for(;XNextEvent(d,&e),w;)if(i)
+#define fE for(;XNextEvent(d,&e),1;)
 #define E(s,e) (write(2,s "\n",sizeof(s)),e<0?0:(exit(e),0))
 int L(XIC c,XEvent*e,KeySym*k,int*S){char _[4];return!!XmbLookupString(c,(XKeyEvent*)e,_,4,k,S)&!XFilterEvent(e,0);}
 int H(Display*d,XErrorEvent*e){e->error_code==BadAccess&&E("!!Grab",111);XSetErrorHandler(0);}
@@ -31,19 +31,19 @@ KeyCode m=XKeysymToKeycode(d,XK_Multi_key),t;m||E("!!Multi_key",111);{
 XSetErrorHandler(H);XSelectInput(d,w,KeyPressMask);
 fI(256){KeySym k;int _;XkbLookupKeySym(d,m,i,&_,&k);k==XK_Multi_key&&XGrabKey(d,m,i,w,1,GrabModeAsync,GrabModeAsync);}
 XSync(d,0);
-XEvent e;KeySym k;int S;if(C>1)write(1,"\n",1),close(1);fE(1,e.type==KeyPress&&(L(c,&e,&k,&S),k==XK_Multi_key)){
+XEvent e;KeySym k;int S;if(C>1)write(1,"\n",1),close(1);fE if(e.type==KeyPress&&(L(c,&e,&k,&S),k==XK_Multi_key)){
 #define v ((XKeyEvent*)&e)->time
 	{
 		Window f;int F;XGetInputFocus(d,&f,&F);
 		if(XGrabKeyboard(d,w,1,GrabModeAsync,GrabModeAsync,v)){E("!GrabKeyboard",-1);continue;}
 		XSetInputFocus(d,f,F,0);
 		}
-	fE(1,e.type==KeyPress&&L(c,&e,&k,&S)){
+	fE if(e.type==KeyPress&&L(c,&e,&k,&S)){
 		XUngrabKeyboard(d,v);
 		XChangeKeyboardMapping(d,t,1,&k,1);XSync(d,0);
 		XTestFakeKeyEvent(d,t,1,0);XTestFakeKeyEvent(d,t,0,0);
 		if(XGrabKeyboard(d,w,1,GrabModeAsync,GrabModeAsync,v))E("!再GrabKeyboard",-1);else{
-			XSelectInput(d,w,KeyReleaseMask);fE(e.type!=KeyRelease,0);XSelectInput(d,w,KeyPressMask);XFlush(d);
+			XSelectInput(d,w,KeyReleaseMask);fE if(e.type==KeyRelease)break;XSelectInput(d,w,KeyPressMask);XFlush(d);
 			XUngrabKeyboard(d,v);
 			}
 		k=0;XChangeKeyboardMapping(d,t,1,&k,1);XSync(d,0);
