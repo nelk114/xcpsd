@@ -17,9 +17,9 @@ Display*d=XOpenDisplay(0);d||E("!!$DISPLAY",111);
 Window w=DefaultRootWindow(d);w||E("!!RootWindow",111);
 XIC c=0;{
 	XSetLocaleModifiers("@im=none")||E("!SetLocaleModifiers",-1);
-	XIM m=XOpenIM(d,0,0,0);XIMStyles*S;XIMStyle s;m||E("!!XIM",111);
+	XIM m=XOpenIM(d,0,0,0);XIMStyles*S;XIMStyle s=0;m||E("!!XIM",111);
 	!XGetIMValues(m,XNQueryInputStyle,&S,0)&&S||E("!XIMStyle",-1);if(S){
-		s=0;fI(S->count_styles)if((s=S->supported_styles[i])==(XIMPreeditNothing|XIMStatusNothing))goto f;
+		fI(S->count_styles)if((s=S->supported_styles[i])==(XIMPreeditNothing|XIMStatusNothing))goto f;
 		E("!XIMStyle",-1);f:XFree(S);
 		}
 	s&&!(c=XCreateIC(m,XNInputStyle,s,XNClientWindow,w,0))&&E("!!XIC",111);
