@@ -24,11 +24,11 @@ XIC c=0;{
 		}
 	s&&!(c=XCreateIC(m,XNInputStyle,s,XNClientWindow,w,0))&&E("!!XIC",111);
 	}
+XSetErrorHandler(H);XSelectInput(d,w,KeyPressMask);
 KeyCode m=XKeysymToKeycode(d,XK_Multi_key),t;m||E("!!Multi_key",111);{
 	int M,m,n;XDisplayKeycodes(d,&m,&M);KeySym*K=XGetKeyboardMapping(d,m,M-m+1,&n);
 	fI(M-m)if(!K[i*n]){t=i+m;goto k;}E("!!KS",111);k:XFree(K);
 	}
-XSetErrorHandler(H);XSelectInput(d,w,KeyPressMask);
 fI(256){KeySym k;int _;XkbLookupKeySym(d,m,i,&_,&k);k==XK_Multi_key&&XGrabKey(d,m,i,w,1,GrabModeAsync,GrabModeAsync);}
 XSync(d,0);
 XEvent e;KeySym k[2];int S;if(C>1)write(1,"\n",1),close(1);fE if(e.type==KeyPress&&(L(c,&e,k,&S),*k==XK_Multi_key)){
