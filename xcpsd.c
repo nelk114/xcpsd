@@ -39,7 +39,7 @@ XEvent e;KeySym k[2];int S;if(C>1)write(1,"\n",1),close(1);fE if(e.type==KeyPres
 		XSetInputFocus(d,f,F,0);
 		}
 	fE if(e.type==KeyPress&&L(c,&e,k,&S)){
-		k[1]=k[0];XChangeKeyboardMapping(d,t,2,k,1);XSync(d,0);
+		k[1]=*k;XChangeKeyboardMapping(d,t,2,k,1);XSync(d,0);
 		XUngrabKeyboard(d,v);XTestFakeKeyEvent(d,t,1,0);XTestFakeKeyEvent(d,t,0,0);
 		if(XGrabKeyboard(d,w,1,GrabModeAsync,GrabModeAsync,v))E("!再GrabKeyboard",-1);else{
 			XSelectInput(d,w,KeyReleaseMask);fE if(e.type==KeyRelease)break;XSelectInput(d,w,KeyPressMask);XFlush(d);
