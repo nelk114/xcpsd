@@ -7,7 +7,7 @@
 #include <X11/extensions/XTest.h>
 #define fI(n) for(int i=0;i<n;i++)
 #define fE for(;XNextEvent(d,&e),1;)
-#define E(s,e) (write(2,s "\n",sizeof(s)),e<0?0:(exit(e),0))
+#define E(s,e) (write(2,s "\n",sizeof(s)),e<0?0:exit(e),0)
 int L(XIC c,XEvent*e,KeySym*k,int*S){char _[4];return!!XmbLookupString(c,(XKeyEvent*)e,_,4,k,S)&!XFilterEvent(e,0);}
 int H(Display*d,XErrorEvent*e){e->error_code==BadAccess&&E("!!Grab",111);XSetErrorHandler(0);}
 int main(int C,char**V){
